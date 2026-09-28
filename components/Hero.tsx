@@ -1,16 +1,20 @@
 import { inProgress, profile } from "@/content";
 import { LocalClock } from "./LocalClock";
 import { TableOfContents, type TocItem } from "./TableOfContents";
+import { ThemeToggle } from "./ThemeToggle";
 
 export function Hero({ toc }: { toc: TocItem[] }) {
   return (
     <header className="hero">
       <div className="container topbar">
         <p className="label">J. I. Rodríguez Leiva</p>
-        <p className="label">
-          Corrientes
-          <LocalClock />
-        </p>
+        <div className="topbar-end">
+          <p className="label">
+            Corrientes
+            <LocalClock />
+          </p>
+          <ThemeToggle />
+        </div>
       </div>
 
       <div className="container hero-grid">

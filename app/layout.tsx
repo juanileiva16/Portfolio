@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Chakra_Petch, IBM_Plex_Mono, IBM_Plex_Sans } from "next/font/google";
 import { profile, site } from "@/content";
+import { themeInitScript } from "@/components/theme";
 import "./globals.css";
 
 // next/font descarga las fuentes en build y las sirve desde el mismo dominio:
@@ -54,7 +55,16 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="es-AR" className={`${display.variable} ${sans.variable} ${mono.variable}`}>
+    // suppressHydrationWarning: el script del <head> puede agregar data-theme a
+    // <html> antes de que React hidrate, y esa diferencia es intencional.
+    <html
+      lang="es-AR"
+      className={`${display.variable} ${sans.variable} ${mono.variable}`}
+      suppressHydrationWarning
+    >
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: themeInitScript }} />
+      </head>
       <body>{children}</body>
     </html>
   );

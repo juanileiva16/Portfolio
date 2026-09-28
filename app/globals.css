@@ -22,8 +22,12 @@
   --mono: var(--font-plex-mono), ui-monospace, monospace;
 }
 
+/* Tema oscuro. Por defecto se sigue al sistema; si el usuario eligió un tema
+   con el botón, <html> lleva data-theme y eso manda. Los valores oscuros van
+   repetidos en los dos bloques a propósito: light-dark() evitaría la
+   repetición, pero deja sin colores a Safari anterior a 17.5. */
 @media (prefers-color-scheme: dark) {
-  :root {
+  :root:not([data-theme="light"]) {
     --bg: #0a0f0c;
     --panel: #0f1612;
     --panel-hover: #131c17;
@@ -34,6 +38,21 @@
     --accent: #5be49b;
     --topo: #16241c;
   }
+}
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --bg: #0a0f0c;
+  --panel: #0f1612;
+  --panel-hover: #131c17;
+  --line: #1e2a23;
+  --line-strong: #2c3d33;
+  --text: #d7e3da;
+  --muted: #8a9a8f;
+  --accent: #5be49b;
+  --topo: #16241c;
+}
+:root[data-theme="light"] {
+  color-scheme: light;
 }
 
 @theme inline {
@@ -250,10 +269,72 @@
   .topbar {
     display: flex;
     flex-wrap: wrap;
+    align-items: center;
     justify-content: space-between;
     gap: 0.25rem 1rem;
-    padding-block: 1rem;
+    padding-block: 0.5rem;
     border-bottom: 1px solid var(--line);
+  }
+  .topbar-end {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  /* Switch de tema: sol (claro) a la izquierda, luna (oscuro) a la derecha;
+     el círculo se desliza hacia el modo activo. El botón mide 44px de alto
+     para que sea fácil de tocar, aunque el riel visible sea más chico. */
+  .theme-switch {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: var(--muted);
+    cursor: pointer;
+  }
+  .theme-switch-track {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 56px;
+    height: 28px;
+    padding-inline: 7px;
+    border: 1px solid var(--line-strong);
+    border-radius: 999px;
+    background: var(--panel);
+  }
+  .theme-switch:hover .theme-switch-track {
+    border-color: var(--accent);
+  }
+  .theme-switch-thumb {
+    position: absolute;
+    top: 3px;
+    left: 3px;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: var(--accent);
+  }
+  .theme-switch[aria-checked="true"] .theme-switch-thumb {
+    transform: translateX(31px);
+  }
+  .theme-switch svg {
+    position: relative;
+    z-index: 1;
+    flex: none;
+  }
+  /* El ícono del modo activo queda sobre el círculo, en color de fondo. */
+  .theme-switch[aria-checked="false"] svg:first-child,
+  .theme-switch[aria-checked="true"] svg:nth-child(2) {
+    color: var(--bg);
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    .theme-switch-thumb {
+      transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    }
   }
 
   .hero-grid {
