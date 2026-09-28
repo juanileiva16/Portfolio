@@ -21,8 +21,6 @@ export type Project = {
   research?: { label: string; authors: string; venue: string };
   /** Tecnologías mencionadas en el texto del proyecto, para escanear rápido. */
   tags?: string[];
-  /** Color propio del proyecto (solo destacados). */
-  tone?: "oxido" | "pizarra" | "oliva";
 };
 
 export type Competition = {
@@ -39,6 +37,8 @@ export const profile = {
   name: "Juan Ignacio Rodríguez Leiva",
   nickname: "Juani",
   location: "Corrientes, Argentina",
+  occupation: "Estudiante de Ing. en Sistemas",
+  availability: "Buscando primera experiencia",
   situation:
     "Estudiante de 4º año de Ingeniería en Sistemas de Información, UTN Facultad Regional Resistencia",
   email: "juanignaciorodriguezleiva5@gmail.com",
@@ -52,7 +52,6 @@ export const profile = {
 export const featured: Project[] = [
   {
     id: "nlasmith",
-    tone: "oxido",
     tags: ["Natural Language Autoencoders", "LLM-as-a-judge", "Neuronpedia"],
     title: "NLASmith",
     subtitle: "Framework para la experimentación con Natural Language Autoencoders",
@@ -82,7 +81,6 @@ export const featured: Project[] = [
   },
   {
     id: "mantia",
-    tone: "pizarra",
     tags: ["Expo SDK 54", "React Native", "Expo Router", "Supabase", "Postgres RLS"],
     title: "Mantia CMMS",
     subtitle: "Sistema de gestión de mantenimiento de equipos",
@@ -105,7 +103,6 @@ export const featured: Project[] = [
   },
   {
     id: "logistica",
-    tone: "oliva",
     tags: ["NestJS", "TypeScript", "TypeORM", "MySQL 8", "Keycloak", "Docker", "GHCR"],
     title: "Módulo de logística",
     subtitle: "Backend de tracking de pedidos",

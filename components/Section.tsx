@@ -1,20 +1,20 @@
 import type { ReactNode } from "react";
+import { pad } from "./TableOfContents";
 
-export type Band = "ink" | "paper" | "sand" | "sage";
-type Props = { id: string; number: number; title: string; band: Band; children: ReactNode };
+type Props = { id: string; number: number; title: string; children: ReactNode };
 
-// Cada sección es una banda de color a todo el ancho con el contenido centrado.
-export function Section({ id, number, title, band, children }: Props) {
+export function Section({ id, number, title, children }: Props) {
   return (
-    <section id={id} aria-labelledby={`${id}-title`} className={`band band-${band}`}>
+    <section id={id} aria-labelledby={`${id}-title`} className="section">
       <div className="container">
         <div className="section-head">
-          <p className="section-number" aria-hidden="true">
-            §{number}
-          </p>
+          <span className="section-number" aria-hidden="true">
+            {pad(number)}
+          </span>
           <h2 id={`${id}-title`} className="section-title">
             <span className="mark">{title}</span>
           </h2>
+          <span className="section-rule" aria-hidden="true" />
         </div>
         {children}
       </div>

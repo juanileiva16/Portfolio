@@ -1,18 +1,21 @@
 import type { Project } from "@/content";
 import { ProjectDetails, SummaryFields } from "./ProjectFields";
 import { ProjectLinks } from "./ProjectLinks";
+import { pad } from "./TableOfContents";
 import { Tags } from "./Tags";
 
-export function FeaturedProject({ project }: { project: Project }) {
-  const { research, tone } = project;
-  const classes = ["card", "featured", tone && `tone-${tone}`, research && "research"];
+export function FeaturedProject({ project, index }: { project: Project; index: number }) {
+  const { research } = project;
   return (
     <article
       id={project.id}
       aria-labelledby={`${project.id}-title`}
-      className={classes.filter(Boolean).join(" ")}
+      className={research ? "panel project featured research" : "panel project featured"}
     >
       <div className="card-meta">
+        <p className="project-index label" aria-hidden="true">
+          P-{pad(index)}
+        </p>
         {research && (
           <p className="kicker label">
             Investigación <span aria-hidden="true">·</span> {research.label}

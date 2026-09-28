@@ -6,13 +6,13 @@ import { Section } from "@/components/Section";
 import type { TocItem } from "@/components/TableOfContents";
 
 const sections = {
-  featured: { id: "destacados", number: 2, title: "Proyectos destacados" },
-  others: { id: "otros", number: 3, title: "Otros proyectos" },
-  inProgress: { id: "en-curso", number: 4, title: "En curso" },
-  competitions: { id: "competencias", number: 5, title: "Competencias" },
-  stack: { id: "stack", number: 6, title: "Stack" },
-  education: { id: "formacion", number: 7, title: "Formación" },
-  contact: { id: "contacto", number: 8, title: "Contacto" },
+  featured: { id: "destacados", number: 1, title: "Proyectos destacados" },
+  others: { id: "otros", number: 2, title: "Otros proyectos" },
+  inProgress: { id: "en-curso", number: 3, title: "En curso" },
+  competitions: { id: "competencias", number: 4, title: "Competencias" },
+  stack: { id: "stack", number: 5, title: "Stack" },
+  education: { id: "formacion", number: 6, title: "Formación" },
+  contact: { id: "contacto", number: 7, title: "Contacto" },
 } satisfies Record<string, TocItem>;
 
 export default function Home() {
@@ -24,38 +24,44 @@ export default function Home() {
       <Hero toc={Object.values(sections)} />
 
       <main id="contenido" tabIndex={-1}>
-        <Section {...sections.featured} band="paper">
+        <Section {...sections.featured}>
           <div className="featured-list">
-            {featured.map((project) => (
-              <FeaturedProject key={project.id} project={project} />
+            {featured.map((project, i) => (
+              <FeaturedProject key={project.id} project={project} index={i + 1} />
             ))}
           </div>
         </Section>
 
-        <Section {...sections.others} band="sand">
+        <Section {...sections.others}>
           <p className="swipe-hint label" aria-hidden="true">
             Deslizá →
           </p>
           {/* En mobile es un carrusel con scroll-snap; desde 640px, grilla de 2. */}
           <div className="carousel" role="region" aria-label="Otros proyectos" tabIndex={0}>
             <ul>
-              {others.map((project) => (
+              {others.map((project, i) => (
                 <li key={project.id}>
-                  <CompactProject project={project} />
+                  <CompactProject project={project} index={featured.length + i + 1} />
                 </li>
               ))}
             </ul>
           </div>
         </Section>
 
-        <Section {...sections.inProgress} band="sand">
-          <CompactProject project={inProgress} dashed />
+        <Section {...sections.inProgress}>
+          <div className="mission">
+            <p className="mission-bar label">
+              <span className="status-dot" aria-hidden="true" />
+              Misión activa
+            </p>
+            <CompactProject project={inProgress} index={featured.length + others.length + 1} />
+          </div>
         </Section>
 
-        <Section {...sections.competitions} band="sage">
+        <Section {...sections.competitions}>
           <ul className="bento">
             {competitions.map((c) => (
-              <li key={c.title} className={c.highlights ? "card bento-wide" : "card"}>
+              <li key={c.title} className={c.highlights ? "panel bento-wide" : "panel"}>
                 <p className="bento-title">
                   {c.title}
                   <span className="bento-year">{c.year}</span>
@@ -76,13 +82,13 @@ export default function Home() {
           </ul>
         </Section>
 
-        <Section {...sections.stack} band="paper">
+        <Section {...sections.stack}>
           <dl className="stack-grid">
             {stack.map((group) => (
-              <div key={group.level} className="card">
+              <div key={group.level} className="panel">
                 <dt className="label">{group.level}</dt>
                 <dd>
-                  <ul className="tags neutral">
+                  <ul className="tags">
                     {group.items.map((item) => (
                       <li key={item}>{item}</li>
                     ))}
@@ -93,7 +99,7 @@ export default function Home() {
           </dl>
         </Section>
 
-        <Section {...sections.education} band="sand">
+        <Section {...sections.education}>
           <ol className="timeline">
             {education.map((item) => (
               <li key={item.title}>
@@ -107,39 +113,42 @@ export default function Home() {
           </ol>
         </Section>
 
-        <Section {...sections.contact} band="ink">
-          <dl className="contact">
-            <div>
-              <dt className="label">Email</dt>
-              <dd>
-                <a href={`mailto:${profile.email}`}>{profile.email}</a>
-              </dd>
-            </div>
-            <div>
-              <dt className="label">GitHub</dt>
-              <dd>
-                <a href={profile.github}>{profile.github.replace("https://", "")}</a>
-              </dd>
-            </div>
-            <div>
-              <dt className="label">LinkedIn</dt>
-              <dd>
-                <a href={profile.linkedin}>
-                  {decodeURI(profile.linkedin).replace("https://www.", "")}
-                </a>
-              </dd>
-            </div>
-            <div>
-              <dt className="label">CV</dt>
-              <dd>
-                <a href={profile.cv} className="button">
-                  Descargar CV <span className="button-meta">PDF</span>
-                </a>
-              </dd>
-            </div>
-          </dl>
+        <Section {...sections.contact}>
+          <div className="panel contact-panel">
+            <dl className="contact">
+              <div>
+                <dt className="label">Email</dt>
+                <dd>
+                  <a href={`mailto:${profile.email}`}>{profile.email}</a>
+                </dd>
+              </div>
+              <div>
+                <dt className="label">GitHub</dt>
+                <dd>
+                  <a href={profile.github}>{profile.github.replace("https://", "")}</a>
+                </dd>
+              </div>
+              <div>
+                <dt className="label">LinkedIn</dt>
+                <dd>
+                  <a href={profile.linkedin}>
+                    {decodeURI(profile.linkedin).replace("https://www.", "")}
+                  </a>
+                </dd>
+              </div>
+            </dl>
+            <a href={profile.cv} className="button">
+              Descargar CV <span className="button-meta">PDF</span>
+            </a>
+          </div>
         </Section>
       </main>
+
+      <footer className="container footer">
+        <p className="label">
+          {profile.name} <span aria-hidden="true">·</span> 2026
+        </p>
+      </footer>
     </>
   );
 }

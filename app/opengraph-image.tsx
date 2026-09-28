@@ -3,17 +3,27 @@ import { join } from "node:path";
 import { ImageResponse } from "next/og";
 import { profile } from "@/content";
 
-// Se genera una sola vez en build (ruta estática) con las mismas fuentes y paleta del sitio.
+// Se genera una sola vez en build (ruta estática) con la misma paleta y fuentes del sitio.
 export const alt = `${profile.name} — ${profile.tagline}`;
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
+const GREEN = "#5BE49B";
+// Esquina del marco: solo los dos bordes que corresponden a su posición.
+const corner = (pos: Partial<Record<"top" | "bottom" | "left" | "right", number>>) => {
+  const border = `3px solid ${GREEN}`;
+  const sides = Object.fromEntries(
+    Object.keys(pos).map((side) => [`border${side[0].toUpperCase()}${side.slice(1)}`, border]),
+  );
+  return { position: "absolute" as const, width: 36, height: 36, ...pos, ...sides };
+};
+
 export default async function OpengraphImage() {
   const fonts = join(process.cwd(), "assets/fonts");
-  const [serif, serifSemibold, sansSemibold] = await Promise.all([
-    readFile(join(fonts, "SourceSerif4-Regular.ttf")),
-    readFile(join(fonts, "SourceSerif4-Semibold.ttf")),
-    readFile(join(fonts, "SourceSans3-Semibold.ttf")),
+  const [display, mono, sans] = await Promise.all([
+    readFile(join(fonts, "ChakraPetch-SemiBold.woff")),
+    readFile(join(fonts, "IBMPlexMono-Medium.woff")),
+    readFile(join(fonts, "IBMPlexSans-Regular.woff")),
   ]);
 
   return new ImageResponse(
@@ -23,43 +33,62 @@ export default async function OpengraphImage() {
           width: "100%",
           height: "100%",
           display: "flex",
-          flexDirection: "column",
-          justifyContent: "space-between",
-          padding: "80px 96px",
-          background: "#1C1B19",
-          color: "#F3EEE5",
-          fontFamily: "Source Serif 4",
+          padding: 48,
+          background: "#0A0F0C",
+          color: "#D7E3DA",
+          fontFamily: "IBM Plex Sans",
         }}
       >
         <div
           style={{
+            position: "relative",
+            flex: 1,
             display: "flex",
-            fontFamily: "Source Sans 3",
-            fontWeight: 600,
-            fontSize: 24,
-            letterSpacing: 4,
-            textTransform: "uppercase",
-            color: "#F0A07A",
+            flexDirection: "column",
+            justifyContent: "space-between",
+            padding: "48px 56px",
+            border: "1px solid #1E2A23",
+            background: "#0F1612",
           }}
         >
-          Portfolio · {profile.location}
-        </div>
-        <div style={{ display: "flex", flexDirection: "column" }}>
-          <div style={{ fontSize: 76, fontWeight: 600, lineHeight: 1.05, letterSpacing: -1 }}>
-            {profile.name}
-          </div>
+          <div style={corner({ top: -2, left: -2 })} />
+          <div style={corner({ top: -2, right: -2 })} />
+          <div style={corner({ bottom: -2, left: -2 })} />
+          <div style={corner({ bottom: -2, right: -2 })} />
           <div
             style={{
-              marginTop: 32,
-              paddingLeft: 28,
-              borderLeft: "4px solid #F0A07A",
-              fontSize: 30,
-              lineHeight: 1.4,
-              color: "#B5AEA2",
-              maxWidth: 960,
+              display: "flex",
+              justifyContent: "space-between",
+              fontFamily: "IBM Plex Mono",
+              fontSize: 22,
+              letterSpacing: 2,
+              textTransform: "uppercase",
+              color: "#8A9A8F",
             }}
           >
-            {profile.tagline}
+            <span>{profile.occupation}</span>
+            <span style={{ display: "flex", alignItems: "center", color: GREEN }}>
+              <span
+                style={{ width: 12, height: 12, borderRadius: 6, background: GREEN, marginRight: 14 }}
+              />
+              {profile.availability}
+            </span>
+          </div>
+          <div style={{ display: "flex", flexDirection: "column" }}>
+            <div
+              style={{
+                fontFamily: "Chakra Petch",
+                fontSize: 80,
+                lineHeight: 1,
+                textTransform: "uppercase",
+                color: "#D7E3DA",
+              }}
+            >
+              {profile.name}
+            </div>
+            <div style={{ marginTop: 28, fontSize: 28, lineHeight: 1.45, color: "#8A9A8F", maxWidth: 960 }}>
+              {profile.tagline}
+            </div>
           </div>
         </div>
       </div>
@@ -67,9 +96,9 @@ export default async function OpengraphImage() {
     {
       ...size,
       fonts: [
-        { name: "Source Serif 4", data: serif, weight: 400, style: "normal" },
-        { name: "Source Serif 4", data: serifSemibold, weight: 600, style: "normal" },
-        { name: "Source Sans 3", data: sansSemibold, weight: 600, style: "normal" },
+        { name: "Chakra Petch", data: display, weight: 600, style: "normal" },
+        { name: "IBM Plex Mono", data: mono, weight: 500, style: "normal" },
+        { name: "IBM Plex Sans", data: sans, weight: 400, style: "normal" },
       ],
     },
   );
