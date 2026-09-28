@@ -1,6 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { Chakra_Petch, IBM_Plex_Mono, IBM_Plex_Sans } from "next/font/google";
-import { site } from "@/content";
+import { profile, site } from "@/content";
 import "./globals.css";
 
 // next/font descarga las fuentes en build y las sirve desde el mismo dominio:
@@ -25,15 +25,20 @@ const mono = IBM_Plex_Mono({
   display: "swap",
 });
 
-const productionHost = process.env.VERCEL_PROJECT_PRODUCTION_URL;
-
 export const metadata: Metadata = {
-  metadataBase: new URL(productionHost ? `https://${productionHost}` : "http://localhost:3000"),
+  // Base fija: las URLs de og:image y la canónica apuntan siempre al dominio
+  // oficial, aunque el sitio se sirva desde una URL de preview de Vercel.
+  metadataBase: new URL(site.url),
   title: site.title,
   description: site.description,
+  authors: [{ name: profile.name, url: site.url }],
+  creator: profile.name,
+  alternates: { canonical: "/" },
   openGraph: {
     type: "website",
     locale: "es_AR",
+    url: "/",
+    siteName: site.title,
     title: site.title,
     description: site.description,
   },

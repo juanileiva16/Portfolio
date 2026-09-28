@@ -2,6 +2,7 @@ import { competitions, education, featured, inProgress, others, profile, stack }
 import { CompactProject } from "@/components/CompactProject";
 import { FeaturedProject } from "@/components/FeaturedProject";
 import { Hero } from "@/components/Hero";
+import { PersonJsonLd } from "@/components/PersonJsonLd";
 import { Section } from "@/components/Section";
 import type { TocItem } from "@/components/TableOfContents";
 
@@ -18,6 +19,7 @@ const sections = {
 export default function Home() {
   return (
     <>
+      <PersonJsonLd />
       <a href="#contenido" className="skip-link">
         Saltar al contenido
       </a>

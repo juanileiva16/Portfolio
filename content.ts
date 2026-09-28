@@ -240,6 +240,8 @@ export const education: EducationItem[] = [
 
 /** Metadatos para buscadores y para compartir el link. */
 export const site = {
-  title: "Juan Ignacio Rodríguez Leiva",
+  title: "Juan Ignacio Rodríguez Leiva · Portfolio",
   description: profile.tagline,
+  /** Dirección oficial del sitio: se usa como URL canónica, en el sitemap y en los datos estructurados. */
+  url: "https://juanileiva.vercel.app",
 };
