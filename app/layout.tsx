@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { Chakra_Petch, IBM_Plex_Mono, IBM_Plex_Sans } from "next/font/google";
 import { profile, site } from "@/content";
 import { themeInitScript } from "@/components/theme";
+import { TopoSpotlight } from "@/components/TopoSpotlight";
 import "./globals.css";
 
 // next/font descarga las fuentes en build y las sirve desde el mismo dominio:
@@ -65,7 +66,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <head>
         <script dangerouslySetInnerHTML={{ __html: themeInitScript }} />
       </head>
-      <body>{children}</body>
+      <body>
+        <TopoSpotlight />
+        {children}
+      </body>
     </html>
   );
 }
